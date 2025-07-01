@@ -105,32 +105,66 @@ All colors MUST be HSL.
   }
 }
 
-/* Custom avatar animations */
-@keyframes breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+/* Enhanced avatar animations */
+@keyframes naturalBreathe {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.01) translateY(-1px); }
 }
 
-@keyframes mouthTalk {
-  0%, 100% { height: 0.5rem; width: 1.5rem; border-radius: 9999px; }
-  25% { height: 1rem; width: 2rem; border-radius: 50%; }
-  50% { height: 1.5rem; width: 2rem; border-radius: 50%; }
-  75% { height: 1rem; width: 1.5rem; border-radius: 50%; }
+@keyframes realisticMouthTalk {
+  0% { 
+    width: 1rem; height: 0.25rem; border-radius: 9999px;
+    transform: translateY(0);
+  }
+  20% { 
+    width: 1.5rem; height: 0.75rem; border-radius: 50%;
+    transform: translateY(-1px);
+  }
+  40% { 
+    width: 2rem; height: 1rem; border-radius: 50%;
+    transform: translateY(-2px);
+  }
+  60% { 
+    width: 1.25rem; height: 1.5rem; border-radius: 50%;
+    transform: translateY(-1px);
+  }
+  80% { 
+    width: 1.5rem; height: 0.5rem; border-radius: 50%;
+    transform: translateY(0);
+  }
+  100% { 
+    width: 1rem; height: 0.25rem; border-radius: 9999px;
+    transform: translateY(0);
+  }
 }
 
-@keyframes eyeBlink {
-  0%, 90%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.1); }
+@keyframes subtleEyeBlink {
+  0%, 92%, 100% { transform: scaleY(1); opacity: 1; }
+  94%, 98% { transform: scaleY(0.1); opacity: 0.8; }
 }
 
-.animate-breathe {
-  animation: breathe 3s ease-in-out infinite;
+@keyframes cheekGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.1); }
 }
 
-.animate-mouth-talk {
-  animation: mouthTalk 0.3s ease-in-out infinite;
+.animate-natural-breathe {
+  animation: naturalBreathe 4s ease-in-out infinite;
 }
 
-.animate-eye-blink {
-  animation: eyeBlink 4s ease-in-out infinite;
+.animate-realistic-mouth-talk {
+  animation: realisticMouthTalk 0.25s ease-in-out infinite;
+}
+
+.animate-subtle-eye-blink {
+  animation: subtleEyeBlink 5s ease-in-out infinite;
+}
+
+.animate-cheek-glow {
+  animation: cheekGlow 2s ease-in-out infinite;
+}
+
+/* Smooth transitions for all avatar parts */
+.avatar-part {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
