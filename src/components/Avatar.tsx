@@ -11,10 +11,9 @@ interface AvatarProps {
 
 const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking }) => {
   const [mouthShape, setMouthShape] = useState<'closed' | 'small' | 'medium' | 'wide' | 'oh'>('closed');
-  const [eyeExpression, setEyeExpression] = useState<'normal' | 'squint' | 'wide'>('normal');
   const mouthAnimationRef = useRef<NodeJS.Timeout | null>(null);
 
-  // More sophisticated mouth animation patterns
+  // Only animate mouth when speaking
   useEffect(() => {
     if (isSpeaking) {
       const animateMouth = () => {
@@ -23,13 +22,6 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
         
         const interval = setInterval(() => {
           setMouthShape(mouthShapes[currentIndex]);
-          
-          // Add occasional eye expressions for more life
-          if (Math.random() > 0.7) {
-            setEyeExpression(Math.random() > 0.5 ? 'squint' : 'wide');
-            setTimeout(() => setEyeExpression('normal'), 200);
-          }
-          
           currentIndex = (currentIndex + 1) % mouthShapes.length;
         }, 150 + Math.random() * 100); // Vary timing for more natural feel
         
@@ -39,7 +31,6 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
       animateMouth();
     } else {
       setMouthShape('closed');
-      setEyeExpression('normal');
       if (mouthAnimationRef.current) {
         clearInterval(mouthAnimationRef.current);
       }
@@ -69,46 +60,35 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
     }
   };
 
-  const getEyeSize = () => {
-    switch (eyeExpression) {
-      case 'squint':
-        return 'w-6 h-4';
-      case 'wide':
-        return 'w-10 h-14';
-      default:
-        return 'w-8 h-12';
-    }
-  };
-
   return (
     <div className="flex flex-col items-center space-y-8">
       {/* Avatar Container */}
       <div className="relative">
-        {/* Avatar Head - removed pulsing animations */}
+        {/* Avatar Head - completely static */}
         <div className="relative w-64 h-80 bg-gradient-to-b from-amber-100 to-amber-200 rounded-t-full rounded-b-3xl shadow-2xl border-4 border-amber-300">
           {/* Face Shadow */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-amber-300/20 rounded-t-full rounded-b-3xl"></div>
           
-          {/* Eyes with dynamic expressions - removed pulsing */}
-          <div className={`absolute top-20 left-12 ${getEyeSize()} bg-white rounded-full shadow-inner transition-all duration-200`}>
+          {/* Static Eyes - no expressions or changes */}
+          <div className="absolute top-20 left-12 w-8 h-12 bg-white rounded-full shadow-inner">
             <div className="w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1">
               <div className="w-2 h-2 bg-white rounded-full mt-1 ml-1"></div>
             </div>
           </div>
-          <div className={`absolute top-20 right-12 ${getEyeSize()} bg-white rounded-full shadow-inner transition-all duration-200`}>
+          <div className="absolute top-20 right-12 w-8 h-12 bg-white rounded-full shadow-inner">
             <div className="w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1">
               <div className="w-2 h-2 bg-white rounded-full mt-1 ml-1"></div>
             </div>
           </div>
           
-          {/* Animated Eyebrows */}
-          <div className={`absolute top-16 left-10 w-12 h-2 bg-amber-600 rounded-full transform transition-transform duration-200 ${isSpeaking ? '-rotate-6' : '-rotate-12'}`}></div>
-          <div className={`absolute top-16 right-10 w-12 h-2 bg-amber-600 rounded-full transform transition-transform duration-200 ${isSpeaking ? 'rotate-6' : 'rotate-12'}`}></div>
+          {/* Static Eyebrows - no movement */}
+          <div className="absolute top-16 left-10 w-12 h-2 bg-amber-600 rounded-full transform -rotate-12"></div>
+          <div className="absolute top-16 right-10 w-12 h-2 bg-amber-600 rounded-full transform rotate-12"></div>
           
           {/* Nose */}
           <div className="absolute top-32 left-1/2 transform -translate-x-1/2 w-3 h-6 bg-gradient-to-b from-amber-300 to-amber-400 rounded-full shadow-sm"></div>
           
-          {/* Dynamic Mouth */}
+          {/* Only the mouth animates */}
           <div className={getMouthStyle()}>
             {/* Teeth visible for wider mouth shapes */}
             {(mouthShape === 'wide' || mouthShape === 'oh') && (
@@ -120,9 +100,9 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
             )}
           </div>
           
-          {/* Dynamic Cheeks - smooth opacity changes without pulsing */}
-          <div className={`absolute top-36 left-6 w-6 h-6 bg-pink-200 rounded-full transition-all duration-200 ${isSpeaking ? 'opacity-70 scale-105' : 'opacity-40'}`}></div>
-          <div className={`absolute top-36 right-6 w-6 h-6 bg-pink-200 rounded-full transition-all duration-200 ${isSpeaking ? 'opacity-70 scale-105' : 'opacity-40'}`}></div>
+          {/* Static Cheeks - no changes */}
+          <div className="absolute top-36 left-6 w-6 h-6 bg-pink-200 rounded-full opacity-40"></div>
+          <div className="absolute top-36 right-6 w-6 h-6 bg-pink-200 rounded-full opacity-40"></div>
           
           {/* Hair */}
           <div className="absolute -top-4 left-4 right-4 h-16 bg-gradient-to-b from-amber-800 to-amber-700 rounded-t-full shadow-lg"></div>
