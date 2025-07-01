@@ -84,19 +84,19 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
     <div className="flex flex-col items-center space-y-8">
       {/* Avatar Container */}
       <div className="relative">
-        {/* Avatar Head */}
-        <div className={`relative w-64 h-80 bg-gradient-to-b from-amber-100 to-amber-200 rounded-t-full rounded-b-3xl shadow-2xl border-4 border-amber-300 transition-transform duration-300 ${isSpeaking ? 'animate-pulse scale-[1.02]' : ''}`}>
+        {/* Avatar Head - removed pulsing animations */}
+        <div className="relative w-64 h-80 bg-gradient-to-b from-amber-100 to-amber-200 rounded-t-full rounded-b-3xl shadow-2xl border-4 border-amber-300">
           {/* Face Shadow */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-amber-300/20 rounded-t-full rounded-b-3xl"></div>
           
-          {/* Eyes with dynamic expressions */}
+          {/* Eyes with dynamic expressions - removed pulsing */}
           <div className={`absolute top-20 left-12 ${getEyeSize()} bg-white rounded-full shadow-inner transition-all duration-200`}>
-            <div className={`w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1 transition-all duration-300 ${isSpeaking ? 'animate-pulse' : ''}`}>
+            <div className="w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1">
               <div className="w-2 h-2 bg-white rounded-full mt-1 ml-1"></div>
             </div>
           </div>
           <div className={`absolute top-20 right-12 ${getEyeSize()} bg-white rounded-full shadow-inner transition-all duration-200`}>
-            <div className={`w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1 transition-all duration-300 ${isSpeaking ? 'animate-pulse' : ''}`}>
+            <div className="w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1">
               <div className="w-2 h-2 bg-white rounded-full mt-1 ml-1"></div>
             </div>
           </div>
@@ -120,9 +120,9 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
             )}
           </div>
           
-          {/* Dynamic Cheeks */}
-          <div className={`absolute top-36 left-6 w-6 h-6 bg-pink-200 rounded-full transition-all duration-200 ${isSpeaking ? 'opacity-90 scale-110' : 'opacity-40'}`}></div>
-          <div className={`absolute top-36 right-6 w-6 h-6 bg-pink-200 rounded-full transition-all duration-200 ${isSpeaking ? 'opacity-90 scale-110' : 'opacity-40'}`}></div>
+          {/* Dynamic Cheeks - smooth opacity changes without pulsing */}
+          <div className={`absolute top-36 left-6 w-6 h-6 bg-pink-200 rounded-full transition-all duration-200 ${isSpeaking ? 'opacity-70 scale-105' : 'opacity-40'}`}></div>
+          <div className={`absolute top-36 right-6 w-6 h-6 bg-pink-200 rounded-full transition-all duration-200 ${isSpeaking ? 'opacity-70 scale-105' : 'opacity-40'}`}></div>
           
           {/* Hair */}
           <div className="absolute -top-4 left-4 right-4 h-16 bg-gradient-to-b from-amber-800 to-amber-700 rounded-t-full shadow-lg"></div>
@@ -137,11 +137,6 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
           {/* Shirt details */}
           <div className="w-32 h-4 bg-blue-400 mx-auto rounded-t-3xl mt-2"></div>
         </div>
-        
-        {/* Subtle breathing animation when not speaking */}
-        {!isSpeaking && (
-          <div className="absolute inset-0 animate-pulse opacity-30"></div>
-        )}
       </div>
       
       {/* Text Input */}
@@ -161,7 +156,7 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
         disabled={!text.trim() || isSpeaking}
         className={`flex items-center space-x-2 px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 shadow-lg ${
           isSpeaking
-            ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+            ? 'bg-red-500 hover:bg-red-600'
             : text.trim()
             ? 'bg-blue-500 hover:bg-blue-600 hover:scale-105'
             : 'bg-gray-400 cursor-not-allowed'
@@ -169,7 +164,7 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
       >
         {isSpeaking ? (
           <>
-            <Volume2 className="w-5 h-5 animate-bounce" />
+            <Volume2 className="w-5 h-5" />
             <span>Speaking...</span>
           </>
         ) : (
