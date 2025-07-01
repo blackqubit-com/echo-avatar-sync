@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Volume2 } from 'lucide-react';
+import { Mic, Volume2 } from 'lucide-react';
 
 interface AvatarProps {
   text: string;
@@ -23,7 +23,7 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
         const interval = setInterval(() => {
           setMouthShape(mouthShapes[currentIndex]);
           currentIndex = (currentIndex + 1) % mouthShapes.length;
-        }, 150 + Math.random() * 100); // Vary timing for more natural feel
+        }, 120 + Math.random() * 80); // Vary timing for more natural feel
         
         mouthAnimationRef.current = interval;
       };
@@ -43,80 +43,74 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
     };
   }, [isSpeaking]);
 
-  const getMouthStyle = () => {
-    const baseClasses = "absolute top-44 left-1/2 transform -translate-x-1/2 transition-all duration-100";
+  const getMouthComponent = () => {
+    const baseClasses = "relative transition-all duration-100 transform";
     
     switch (mouthShape) {
       case 'small':
-        return `${baseClasses} w-4 h-3 bg-red-400 rounded-full`;
+        return (
+          <div className={`${baseClasses} w-16 h-8`}>
+            <div className="w-full h-full bg-gradient-to-b from-red-500 to-red-700 rounded-full shadow-2xl border-2 border-red-800">
+              <div className="w-8 h-2 bg-white rounded-sm mx-auto mt-2 opacity-80"></div>
+            </div>
+          </div>
+        );
       case 'medium':
-        return `${baseClasses} w-6 h-4 bg-red-500 rounded-full`;
+        return (
+          <div className={`${baseClasses} w-20 h-12`}>
+            <div className="w-full h-full bg-gradient-to-b from-red-500 to-red-800 rounded-full shadow-2xl border-2 border-red-900">
+              <div className="w-10 h-3 bg-white rounded-sm mx-auto mt-3 opacity-90"></div>
+              <div className="w-6 h-2 bg-pink-300 rounded-full mx-auto mt-1"></div>
+            </div>
+          </div>
+        );
       case 'wide':
-        return `${baseClasses} w-8 h-3 bg-red-500 rounded-full`;
+        return (
+          <div className={`${baseClasses} w-24 h-10`}>
+            <div className="w-full h-full bg-gradient-to-b from-red-500 to-red-800 rounded-full shadow-2xl border-2 border-red-900">
+              <div className="w-14 h-3 bg-white rounded-sm mx-auto mt-2 opacity-90"></div>
+              <div className="w-8 h-2 bg-pink-300 rounded-full mx-auto mt-1"></div>
+            </div>
+          </div>
+        );
       case 'oh':
-        return `${baseClasses} w-5 h-7 bg-red-600 rounded-full`;
+        return (
+          <div className={`${baseClasses} w-18 h-20`}>
+            <div className="w-full h-full bg-gradient-to-b from-red-600 to-red-900 rounded-full shadow-2xl border-2 border-red-900">
+              <div className="w-8 h-4 bg-white rounded-sm mx-auto mt-4 opacity-80"></div>
+              <div className="w-10 h-6 bg-pink-400 rounded-full mx-auto mt-2"></div>
+            </div>
+          </div>
+        );
       default:
-        return `${baseClasses} w-4 h-1 bg-red-300 rounded-full`;
+        return (
+          <div className={`${baseClasses} w-12 h-3`}>
+            <div className="w-full h-full bg-gradient-to-r from-red-400 to-red-600 rounded-full shadow-lg border border-red-700"></div>
+          </div>
+        );
     }
   };
 
   return (
     <div className="flex flex-col items-center space-y-8">
-      {/* Avatar Container */}
-      <div className="relative">
-        {/* Avatar Head - completely static */}
-        <div className="relative w-64 h-80 bg-gradient-to-b from-amber-100 to-amber-200 rounded-t-full rounded-b-3xl shadow-2xl border-4 border-amber-300">
-          {/* Face Shadow */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-amber-300/20 rounded-t-full rounded-b-3xl"></div>
-          
-          {/* Static Eyes - no expressions or changes */}
-          <div className="absolute top-20 left-12 w-8 h-12 bg-white rounded-full shadow-inner">
-            <div className="w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1">
-              <div className="w-2 h-2 bg-white rounded-full mt-1 ml-1"></div>
-            </div>
-          </div>
-          <div className="absolute top-20 right-12 w-8 h-12 bg-white rounded-full shadow-inner">
-            <div className="w-6 h-6 bg-blue-600 rounded-full mt-3 ml-1">
-              <div className="w-2 h-2 bg-white rounded-full mt-1 ml-1"></div>
-            </div>
-          </div>
-          
-          {/* Static Eyebrows - no movement */}
-          <div className="absolute top-16 left-10 w-12 h-2 bg-amber-600 rounded-full transform -rotate-12"></div>
-          <div className="absolute top-16 right-10 w-12 h-2 bg-amber-600 rounded-full transform rotate-12"></div>
-          
-          {/* Nose */}
-          <div className="absolute top-32 left-1/2 transform -translate-x-1/2 w-3 h-6 bg-gradient-to-b from-amber-300 to-amber-400 rounded-full shadow-sm"></div>
-          
-          {/* Only the mouth animates */}
-          <div className={getMouthStyle()}>
-            {/* Teeth visible for wider mouth shapes */}
-            {(mouthShape === 'wide' || mouthShape === 'oh') && (
-              <div className="w-4 h-1 bg-white rounded-sm mx-auto mt-1"></div>
-            )}
-            {/* Tongue for 'oh' shape */}
-            {mouthShape === 'oh' && (
-              <div className="w-3 h-2 bg-pink-300 rounded-full mx-auto mt-2"></div>
-            )}
-          </div>
-          
-          {/* Static Cheeks - no changes */}
-          <div className="absolute top-36 left-6 w-6 h-6 bg-pink-200 rounded-full opacity-40"></div>
-          <div className="absolute top-36 right-6 w-6 h-6 bg-pink-200 rounded-full opacity-40"></div>
-          
-          {/* Hair */}
-          <div className="absolute -top-4 left-4 right-4 h-16 bg-gradient-to-b from-amber-800 to-amber-700 rounded-t-full shadow-lg"></div>
-          <div className="absolute -top-2 left-2 right-2 h-12 bg-gradient-to-b from-amber-700 to-amber-600 rounded-t-full"></div>
-        </div>
+      {/* Cool Animated Mouth - Only Element */}
+      <div className="relative flex items-center justify-center min-h-[120px]">
+        {/* Glow effect behind mouth */}
+        <div className={`absolute inset-0 bg-gradient-to-r from-red-400/30 to-pink-400/30 rounded-full blur-xl transition-all duration-300 ${
+          isSpeaking ? 'scale-150 opacity-70' : 'scale-100 opacity-30'
+        }`}></div>
         
-        {/* Neck */}
-        <div className="w-20 h-12 bg-gradient-to-b from-amber-200 to-amber-300 mx-auto rounded-b-lg shadow-lg"></div>
+        {/* Main mouth component */}
+        {getMouthComponent()}
         
-        {/* Body */}
-        <div className="w-40 h-20 bg-gradient-to-b from-blue-500 to-blue-600 mx-auto rounded-t-3xl shadow-lg mt-2">
-          {/* Shirt details */}
-          <div className="w-32 h-4 bg-blue-400 mx-auto rounded-t-3xl mt-2"></div>
-        </div>
+        {/* Sparkle effects when speaking */}
+        {isSpeaking && (
+          <>
+            <div className="absolute -top-2 -left-2 w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
+            <div className="absolute -bottom-2 -right-2 w-2 h-2 bg-pink-400 rounded-full animate-ping delay-100"></div>
+            <div className="absolute top-0 right-0 w-1 h-1 bg-white rounded-full animate-pulse delay-200"></div>
+          </>
+        )}
       </div>
       
       {/* Text Input */}
@@ -124,8 +118,8 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
         <textarea
           value={text}
           onChange={(e) => onTextChange(e.target.value)}
-          placeholder="Enter text for the avatar to speak..."
-          className="w-full h-24 p-4 border-2 border-gray-300 rounded-lg resize-none focus:border-blue-500 focus:outline-none text-gray-700"
+          placeholder="Enter text for the mouth to speak..."
+          className="w-full h-24 p-4 border-2 border-gray-300 rounded-lg resize-none focus:border-red-500 focus:outline-none text-gray-700"
           disabled={isSpeaking}
         />
       </div>
@@ -138,7 +132,7 @@ const Avatar: React.FC<AvatarProps> = ({ text, onTextChange, onSpeak, isSpeaking
           isSpeaking
             ? 'bg-red-500 hover:bg-red-600'
             : text.trim()
-            ? 'bg-blue-500 hover:bg-blue-600 hover:scale-105'
+            ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 hover:scale-105'
             : 'bg-gray-400 cursor-not-allowed'
         }`}
       >
